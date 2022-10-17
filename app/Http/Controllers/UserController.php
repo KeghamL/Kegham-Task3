@@ -38,7 +38,7 @@ class UserController extends Controller
         $courses = Course::all();
         // $subjects = Subject::all();
         $newss = News::all();
-        return view('home', compact('courses', 'newss', 'subjects'));
+        return view('home', compact('courses', 'newss'));
     }
 
     public function registeration(Request $request)
