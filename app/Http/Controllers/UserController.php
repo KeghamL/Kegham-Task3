@@ -110,7 +110,7 @@ class UserController extends Controller
                     $courses = Course::count();
                     $subjects = Subject::count();
                     $users = User::where('role_as', '2')->count();
-                    $notifications = $request->user()->notifications->all();
+                    $notifications = $request->user()->notifications->where('type', 'user')->all();
                     return view('admin.dashboard', compact('courses', 'subjects', 'users', 'notifications'))->with('success', 'Welcome to Admin Dashboard!');
                     // User:
                 } elseif ($user->role_as == '0') {
