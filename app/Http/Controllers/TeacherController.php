@@ -13,6 +13,8 @@ use App\Models\Announcement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\Notifications\NewAssignmentNotification;
+use Illuminate\Support\Facades\Notification;
 
 class TeacherController extends Controller
 {
@@ -43,6 +45,9 @@ class TeacherController extends Controller
             'submission' => 'required|after:today',
             'image' => 'required',
         ]);
+        $users = User::where('role_as', '0')->get();
+        $admins = User::where('role_as', '1')->get();
+        $teachers = User::where('role_as', '2')->get();
         $assignment = new Assignment();
         $assignment->course_id = $request->course_id;
         $assignment->subject_id = $request->subject_id;
@@ -60,6 +65,8 @@ class TeacherController extends Controller
         $assignment->image = $request->image;
         $res = $assignment->save();
         if ($res == true) {
+            Notification::send($admins, new NewAssignmentNotification($assignment));
+            Notification::send($users, new NewAssignmentNotification($assignment));
             return back()->with('success', 'Assignment Added Successfully!');
         } else {
             return back()->with('fail', 'Something Went Wrong!');

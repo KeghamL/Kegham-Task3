@@ -11,13 +11,23 @@ use App\Models\Subject;
 use App\Models\Teacher;
 use App\Models\Activity;
 use App\Models\Assignment;
+use App\Notifications\NewUserNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
 
 class AdminController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(function($request, $next) {
+            $this->authUser = auth()->user();
+
+            return $next($request);
+        });
+    }
     public function admindashboard()
     {
         $courses = Course::count();
@@ -341,5 +351,15 @@ class AdminController extends Controller
     {
         Activity::truncate();
         return back()->with('success', 'Statistics Deleted Successfuly!');
+    }
+
+    public function markasread(Request $request)
+    {
+        if ($request->notification_id) {
+            auth()->user()->unreadnotifications->find($request->notification_id)->markAsRead();
+        }
+        return response([
+            'status' => true
+        ]);
     }
 }

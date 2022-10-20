@@ -29,7 +29,7 @@
                 <tr>
                     <td>{{ $activity->id ?? 'unknown' }}</td>
                     <td>{{ $activity->urladdress ?? 'unknown' }}</td>
-                    <td>{{ $activity->user->fname ?? 'unknown' }}</td>
+                    <td>{{ $activity->user->fname ?? 'unknown' }} {{ $activity->user->lname ?? 'unknown' }}</td>
                     <td>{{ $activity->user->email ?? 'unknown' }}</td>
                     <td>{{ $activity->created_at ?? 'unknown' }}</td>
                 </tr>

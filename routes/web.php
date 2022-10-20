@@ -90,6 +90,7 @@ Route::group(
                 Route::get('/updateteacher', [TeacherController::class, 'updateteacher']);
                 Route::get('/statisticspage', [AdminController::class, 'statistics']);
                 Route::delete('/statisticsdelete', [AdminController::class, 'deletestatistics'])->name('statistics-delete');
+                Route::get('/markasread', [AdminController::class, 'markasread'])->name('markasread');
             }
         );
     }

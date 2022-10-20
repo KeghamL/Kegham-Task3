@@ -38,12 +38,12 @@
         }
 
         .left {
-            top: 91%;
+            top: 92%;
             left: 45px;
         }
 
         .right {
-            bottom: -3%;
+            bottom: -0%;
             right: 35px;
         }
 
@@ -106,7 +106,7 @@
             <div class="container px-5 my-5">
                 <div class=" row gx-5">
                     <div class="item-div" id="box">
-                        @foreach ($newss as $news)
+                        @foreach ($news as $news)
                             <div class="col-lg-6 mb-5 mb-lg-0">
                                 <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i
                                         class="bi bi-collection"></i></div>
@@ -195,8 +195,9 @@
                             </select>
                         </div>
 
-                        {{-- <div class="form-floating mb-3">
-                            <select class="w3-input w3-border" name="course_id" style="width:510px; height:60px;">
+                        <div class="form-floating mb-3">
+                            <select disabled class="w3-input w3-border" name="subject_id"
+                                style="width:510px; height:60px;">
                                 <option value="">Choose Your Subject:</option>
                                 @foreach ($subjects as $subject)
                                     <option value="{{ $subject->id }}">
@@ -204,7 +205,7 @@
                                     </option>
                                 @endforeach
                             </select>
-                        </div> --}}
+                        </div>
 
 
                         <div class="form-floating mb-3">

@@ -14,6 +14,9 @@ use App\Models\Announcement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Notifications\NewUserNotification;
+use App\Notifications\NewAnswerNotification;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Contracts\Auth\Authenticatable;
 
 
@@ -25,6 +28,7 @@ class UserController extends Controller
     public function __construct()
     {
         $this->middleware(function ($request, $next) {
+            $this->authUser = auth()->user();
 
             $this->user = Auth::user();
 
@@ -36,9 +40,9 @@ class UserController extends Controller
     public function home(Request $request)
     {
         $courses = Course::all();
-        // $subjects = Subject::all();
-        $newss = News::all();
-        return view('home', compact('courses', 'newss'));
+        $subjects = Subject::all();
+        $news = News::all();
+        return view('home', compact('courses', 'news', 'subjects'));
     }
 
     public function registeration(Request $request)
@@ -55,7 +59,8 @@ class UserController extends Controller
             'gender' => 'required'
 
         ]);
-        // dd($request->all());
+        $admins = User::where('role_as', '1')->get();
+        $teachers = User::where('role_as', '2')->get();
         $user = new User();
         $user->fname = $request->fname;
         $user->lname = $request->lname;
@@ -73,6 +78,8 @@ class UserController extends Controller
         $user->image = $request->image;
         $res = $user->save();
         if ($res == true) {
+            Notification::send($admins, new NewUserNotification($user));
+            Notification::send($teachers, new NewUserNotification($user));
             return redirect('/login')->with('success', 'User Registered Successfully!');
         } else {
             return back()->with('fail', 'Something Went Wrong!');
@@ -98,20 +105,26 @@ class UserController extends Controller
         } else {
             auth()->attempt($request->only(['email', 'password']));
             if (Hash::check(request('password'), $user->password)) {
-                if ($user = Auth::user()->role_as == '1') {
+                // Admin:
+                if ($user->role_as == '1') {
                     $courses = Course::count();
                     $subjects = Subject::count();
                     $users = User::where('role_as', '2')->count();
-                    return view('admin.dashboard', compact('courses', 'subjects', 'users'))->with('success', 'Welcome to Admin Dashboard!');
-                } elseif ($user = auth()->user()->role_as == '0') {
-                    $announcments = Announcement::where('course_id', auth()->user()->course_id)->get();
-                    return view('student.dashboard', compact('announcments'))->with('success', 'Logged In Successfully!');
-                } elseif ($user = auth()->user()->role_as == '2') {
-                    $courseID = auth()->user()->course_id;
+                    $notifications = $request->user()->notifications->all();
+                    return view('admin.dashboard', compact('courses', 'subjects', 'users', 'notifications'))->with('success', 'Welcome to Admin Dashboard!');
+                    // User:
+                } elseif ($user->role_as == '0') {
+                    $announcments = Announcement::where('course_id', $user->course_id)->get();
+                    $notifications = $request->user()->notifications->all();
+                    return view('student.dashboard', compact('announcments', 'notifications'))->with('success', 'Logged In Successfully!');
+                    // Teacher:
+                } elseif ($user->role_as == '2') {
+                    $courseID = $user->course_id;
                     $users = User::where('role_as', '0')->where('course_id', $courseID)->count();
-                    $announcments = Announcement::where('user_id', auth()->user()->id)->count();
-                    $assignments = Assignment::where('user_id', auth()->user()->id)->count();
-                    return view('teacher.dashboard', compact('users', 'assignments', 'announcments'))->with('success', 'Logged In Successfully!');
+                    $announcments = Announcement::where('user_id', $user->id)->count();
+                    $assignments = Assignment::where('user_id', $user->id)->count();
+                    $notifications = $request->user()->notifications->all();
+                    return view('teacher.dashboard', compact('users', 'assignments', 'announcments', 'notifications'))->with('success', 'Logged In Successfully!');
                 } else {
                     return back()->with('fail', 'Password Didnt Match!');
                 }
@@ -151,6 +164,7 @@ class UserController extends Controller
             'description' => 'required',
             'image' => 'required',
         ]);
+        $teachers = User::where('role_as', '2')->get();
         $answer = new Answer();
         $answer->user_id = auth()->user()->id;
         $answer->course_id = auth()->user()->course_id;
@@ -169,6 +183,7 @@ class UserController extends Controller
             return back()->with('fail', 'You Can Only Answer Once!');
         }
         if ($res == true) {
+            Notification::send($teachers, new NewAnswerNotification($answer));
             return back()->with('success', 'Answer Submitted Successfully!');
         } else {
             return back()->with('fail', 'Something Went Wrong!');
