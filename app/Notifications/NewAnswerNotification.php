@@ -57,7 +57,7 @@ class NewAnswerNotification extends Notification
     {
         return [
             'user_id' => $this->answer['id'],
-            'course_id' => $this->answer['course'],
+            'course_id' => $this->answer['course_id'],
             'type' => 'answer'
         ];
     }

@@ -57,6 +57,7 @@ class NewAssignmentNotification extends Notification
     {
         return [
             'user_id' => $this->assignment['id'],
+            'course_id' => $this->assignment['course_id'],
             'title' => $this->assignment['title'],
             'type' => 'assignment'
         ];

@@ -91,6 +91,8 @@ Route::group(
                 Route::get('/statisticspage', [AdminController::class, 'statistics']);
                 Route::delete('/statisticsdelete', [AdminController::class, 'deletestatistics'])->name('statistics-delete');
                 Route::get('/markasread', [AdminController::class, 'markasread'])->name('markasread');
+                Route::get('/allusers', [AdminController::class, 'allusers'])->name('all-users');
+                Route::delete('/deleteallusers{user}', [AdminController::class, 'deleteallusers'])->name('deleteall-users');
             }
         );
     }

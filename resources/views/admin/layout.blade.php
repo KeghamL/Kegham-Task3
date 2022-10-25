@@ -74,6 +74,9 @@
                     <li>
                         <a href="/statisticspage">Statistics Page</a>
                     </li>
+                    <li>
+                        <a href="/allusers">Users</a>
+                    </li>
                 </ul>
 
             </div>

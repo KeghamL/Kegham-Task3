@@ -38,6 +38,11 @@
         right: 117px;
         top: 13px;
     }
+
+    #collapseExample {
+        height: 300px;
+        overflow-y: scroll;
+    }
 </style>
 <script>
     $.ajaxSetup({
@@ -119,24 +124,26 @@
                                 @endif
                                 <i class="fa-solid fa-bell" data-toggle="dropdown" data-target="#collapseExample"
                                     id="markasread"></i>
-                                <div class="dropdown-menu" id="collapseExample" id="markasread">
-                                    @forelse (auth()->user()->unreadNotifications as $notification)
+                                <div class="dropdown-menu" id="collapseExample">
+                                    @forelse (auth()->user()->Notifications as $notification)
                                         <input type="hidden" value="{{ $notification->id }}" name="notification_id">
-                                        <a class="dropdown-item" id="markasread">
+                                        <a class="dropdown-item">
                                             @if ($notification->type == 'App\Notifications\NewUserNotification')
                                                 <div class="text-dark  p-2 m-3 ">
-                                                    <b>{{ $notification->data['fname'] }}
-                                                        ({{ $notification->data['email'] }})
-                                                    </b>
-                                                    Registered In
-                                                    The
-                                                    Website!!
+                                                    <a href="/registeredusers"> <b>{{ $notification->data['fname'] }}
+                                                            ({{ $notification->data['email'] }})
+                                                        </b>
+                                                        Registered In
+                                                        The
+                                                        Website!!
+                                                    </a>
                                                 </div>
                                         </a>
                                     @elseif ($notification->type == 'App\Notifications\NewAnswerNotification')
                                         <a class="dropdown-item" id="markasread">
                                             <div class="text-dark  p-2 m-3 ">
-                                                New <b>Answer</b> Has Been Submitted!
+                                                <a href=""> New <b>Answer</b> Has Been
+                                                    Submitted!</a>
                                                 {{-- <a href="/markasread{{ $notification->id }}"
                                                     class="p-2 bg-red-400 text-danger rounded-lg">MarkAsRead</a> --}}
                                             </div>

@@ -23,6 +23,7 @@ class User extends Authenticatable
         'lname',
         'email',
         'course_id',
+        'subject_id',
         'password',
         'repassword',
         'birthday',

@@ -42,6 +42,11 @@
         right: 117px;
         top: 13px;
     }
+
+    #collapseExample {
+        height: 300px;
+        overflow-y: scroll;
+    }
 </style>
 <script>
     $.ajaxSetup({
@@ -102,17 +107,18 @@
                                 @endif
                                 <i class="fa-solid fa-bell" data-toggle="dropdown" data-target="#collapseExample"
                                     id="markasread"></i>
-                                <div class="dropdown-menu" id="collapseExample" id="markasread">
-                                    @forelse (auth()->user()->unreadNotifications as $notification)
+                                <div class="dropdown-menu" id="collapseExample">
+                                    @forelse (auth()->user()->Notifications as $notification)
                                         <input type="hidden" value="{{ $notification->id }}" name="notification_id">
-                                        <a class="dropdown-item" id="markasread">
+                                        <a class="dropdown-item">
                                             <div class="text-dark  p-2 m-3 ">
-                                                Assignmnet With Title
-                                                <b>({{ $notification->data['title'] }})
-                                                </b>
-                                                Has Been Added!
-                                                {{-- <a href="/markasread{{ $notification->id }}"
+                                                <a href="/newassignment">Assignmnet With Title
+                                                    <b>({{ $notification->data['title'] }})
+                                                    </b>
+                                                    Has Been Added!
+                                                    {{-- <a href="/markasread{{ $notification->id }}"
                                                     class="p-2 bg-red-400 text-danger rounded-lg">MarkAsRead</a> --}}
+                                                </a>
                                             </div>
                                         </a>
                                     @empty

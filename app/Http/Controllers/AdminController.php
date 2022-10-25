@@ -22,7 +22,7 @@ class AdminController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(function($request, $next) {
+        $this->middleware(function ($request, $next) {
             $this->authUser = auth()->user();
 
             return $next($request);
@@ -349,6 +349,7 @@ class AdminController extends Controller
 
     public function deletestatistics()
     {
+
         Activity::truncate();
         return back()->with('success', 'Statistics Deleted Successfuly!');
     }
@@ -356,10 +357,22 @@ class AdminController extends Controller
     public function markasread(Request $request)
     {
         if ($request->notification_id) {
-            auth()->user()->unreadnotifications->find($request->notification_id)->markAsRead();
+            auth()->user()->unreadnotifications->where($request->notification_id)->markAsRead();
         }
         return response([
             'status' => true
         ]);
+    }
+
+    public function allusers()
+    {
+        $users = User::where('role_as', '!=', '1')->get();
+        return view('admin.allusers', compact('users'));
+    }
+
+    public function deleteallusers(User $user)
+    {
+        $user->delete();
+        return back()->with('success', 'User Deleted Successfully');
     }
 }

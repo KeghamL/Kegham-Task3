@@ -15,6 +15,7 @@
     <link href="style.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     <style>
         .bg-img {
 
@@ -38,12 +39,12 @@
         }
 
         .left {
-            top: 92%;
+            top: 35%;
             left: 45px;
         }
 
         .right {
-            bottom: -0%;
+            bottom: 63%;
             right: 35px;
         }
 
@@ -59,6 +60,16 @@
 
         .has-bg-img {
             margin-bottom: 70px;
+        }
+
+        #subject1,
+        #subject2,
+        #subject3 {
+            display: none;
+        }
+
+        #google_translate_element {
+            transform: translate(250px)
         }
     </style>
 </head>
@@ -76,6 +87,7 @@
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item"><a class="nav-link active" aria-current="page" href="/">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+                    <li id="google_translate_element"></li>
                 </ul>
             </div>
         </div>
@@ -186,7 +198,8 @@
                         </div>
 
                         <div class="form-floating mb-3">
-                            <select class="w3-input w3-border" name="course_id" style="width:510px; height:60px;">
+                            <select id="course" onchange="enableSubject(this)" class="w3-input w3-border"
+                                name="course_id" style="width:510px; height:60px;">
                                 <option value="">Choose Your Course:</option>
                                 @foreach ($courses as $course)
                                     <option value="{{ $course->id }}">{{ $course->course }}({{ $course->branch }})
@@ -194,12 +207,32 @@
                                 @endforeach
                             </select>
                         </div>
-
-                        <div class="form-floating mb-3">
-                            <select disabled class="w3-input w3-border" name="subject_id"
-                                style="width:510px; height:60px;">
+                        <div class="form-floating mb-3" id="subject1">
+                            <select class="w3-input w3-border" name="subject_id" style="width:510px; height:60px;">
                                 <option value="">Choose Your Subject:</option>
-                                @foreach ($subjects as $subject)
+                                @foreach ($subjects1 as $subject)
+                                    <option value="{{ $subject->id }}">
+                                        {{ $subject->subjectfullname }}({{ $subject->subjectshortname }})
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="form-floating mb-3" id="subject2">
+                            <select class="w3-input w3-border" name="subject_id" style="width:510px; height:60px;">
+                                <option value="">Choose Your Subject:</option>
+                                @foreach ($subjects2 as $subject)
+                                    <option value="{{ $subject->id }}">
+                                        {{ $subject->subjectfullname }}({{ $subject->subjectshortname }})
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="form-floating mb-3" id="subject3">
+                            <select class="w3-input w3-border" name="subject_id" style="width:510px; height:60px;">
+                                <option value="">Choose Your Subject:</option>
+                                @foreach ($subjects3 as $subject)
                                     <option value="{{ $subject->id }}">
                                         {{ $subject->subjectfullname }}({{ $subject->subjectshortname }})
                                     </option>
@@ -251,6 +284,17 @@
     </footer>
 
 
+    {{-- JavaScript Part --}}
+    <script>
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                    pageLanguage: 'en'
+                },
+                'google_translate_element'
+            );
+        }
+    </script>
+
     <script type="text/javascript">
         var button = document.getElementById('right');
         button.onclick = function() {
@@ -301,6 +345,30 @@
             validateDate(value);
         });
     </script>
+
+    <script>
+        function enableSubject(course) {
+            if (course.value == 1) {
+                document.getElementById('subject1').style = 'display:block';
+            } else {
+                document.getElementById('subject1').style = 'display:none';
+            }
+
+            if (course.value == 2) {
+                document.getElementById('subject2').style = 'display:block';
+            } else {
+                document.getElementById('subject2').style = 'display:none';
+            }
+
+            if (course.value == 3) {
+                document.getElementById('subject3').style = 'display:block';
+            } else {
+                document.getElementById('subject3').style = 'display:none';
+            }
+        };
+    </script>
+
+
 
 </body>
 

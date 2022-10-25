@@ -57,6 +57,7 @@ class NewUserNotification extends Notification
     {
         return [
             'user_id' => $this->user['id'],
+            'course_id' => $this->user['course_id'],
             'fname' => $this->user['fname'],
             'email' => $this->user['email'],
             'type' => 'user'

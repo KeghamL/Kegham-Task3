@@ -28,7 +28,6 @@ class UserController extends Controller
     public function __construct()
     {
         $this->middleware(function ($request, $next) {
-            $this->authUser = auth()->user();
 
             $this->user = Auth::user();
 
@@ -40,9 +39,11 @@ class UserController extends Controller
     public function home(Request $request)
     {
         $courses = Course::all();
-        $subjects = Subject::all();
+        $subjects1 = Subject::where('course_id', '1')->get();
+        $subjects2 = Subject::where('course_id', '2')->get();
+        $subjects3 = Subject::where('course_id', '3')->get();
         $news = News::all();
-        return view('home', compact('courses', 'news', 'subjects'));
+        return view('home', compact('courses', 'news', 'subjects1', 'subjects2', 'subjects3'));
     }
 
     public function registeration(Request $request)
@@ -66,6 +67,7 @@ class UserController extends Controller
         $user->lname = $request->lname;
         $user->email = $request->email;
         $user->course_id = $request->course_id;
+        $user->subject_id = $request->subject_id;
         $user->password = Hash::make($request->password);
         $user->birthday = $request->birthday;
         $user->gender = $request->gender;
@@ -76,6 +78,7 @@ class UserController extends Controller
             $input['image'] = "$filename";
         }
         $user->image = $request->image;
+        dd($user);
         $res = $user->save();
         if ($res == true) {
             Notification::send($admins, new NewUserNotification($user));
@@ -110,8 +113,9 @@ class UserController extends Controller
                     $courses = Course::count();
                     $subjects = Subject::count();
                     $users = User::where('role_as', '2')->count();
-                    $notifications = $request->user()->notifications->where('type', 'user')->all();
-                    return view('admin.dashboard', compact('courses', 'subjects', 'users', 'notifications'))->with('success', 'Welcome to Admin Dashboard!');
+                    $assignments = Assignment::where('course_id', $user->course_id)->get();
+                    $notifications = $request->user()->notifications->all();
+                    return view('admin.dashboard', compact('courses', 'subjects', 'users', 'notifications', 'assignments'))->with('success', 'Welcome to Admin Dashboard!');
                     // User:
                 } elseif ($user->role_as == '0') {
                     $announcments = Announcement::where('course_id', $user->course_id)->get();

@@ -39,6 +39,11 @@
         right: 117px;
         top: 13px;
     }
+
+    #collapseExample {
+        height: 300px;
+        overflow-y: scroll;
+    }
 </style>
 <script>
     $.ajaxSetup({
@@ -98,6 +103,9 @@
                     <li>
                         <a href="/statisticspage">Statistics Page</a>
                     </li>
+                    <li>
+                        <a href="/allusers">Users</a>
+                    </li>
                 </ul>
 
             </div>
@@ -128,29 +136,31 @@
                                 @endif
                                 <i class="fa-solid fa-bell" data-toggle="dropdown" data-target="#collapseExample"
                                     id="markasread"></i>
-                                <div class="dropdown-menu" id="collapseExample" id="markasread">
-                                    @forelse (auth()->user()->unreadNotifications as $notification)
+                                <div class="dropdown-menu" id="collapseExample">
+                                    @forelse (auth()->user()->Notifications as $notification)
                                         <input type="hidden" value="{{ $notification->id }}" name="notification_id">
-                                        <a class="dropdown-item" id="markasread">
+                                        <a class="dropdown-item">
                                             @if ($notification->type == 'App\Notifications\NewUserNotification')
                                                 <div class="text-dark  p-2 m-3 ">
-                                                    <b>{{ $notification->data['fname'] }}
-                                                        ({{ $notification->data['email'] }})
-                                                    </b>
-                                                    Registered In
-                                                    Your
-                                                    Website!!
+                                                    <a href="/allusers"><b>{{ $notification->data['fname'] }}
+                                                            ({{ $notification->data['email'] }})
+                                                        </b>
+                                                        Registered In
+                                                        Your
+                                                        Website!!
+                                                    </a>
                                                     {{-- <a href="{{ route('markasread', $notification->id) }}"
                                                         class="p-2 bg-red-400 text-danger rounded-lg">MarkAsRead</a> --}}
                                                 </div>
                                         </a>
                                     @elseif ($notification->type == 'App\Notifications\NewAssignmentNotification')
-                                        <a class="dropdown-item" id="markasread">
+                                        <a class="dropdown-item">
                                             <div class="text-dark  p-2 m-3 ">
-                                                Assignmnet With Title
-                                                <b>({{ $notification->data['title'] }})
-                                                </b>
-                                                Has Been Added!
+                                                <a href="/uncheckedadmin"> Assignmnet With Title
+                                                    <b>({{ $notification->data['title'] }})
+                                                    </b>
+                                                    Has Been Added!
+                                                </a>
                                                 {{-- <a href="/markasread{{ $notification->id }}"
                                                     class="p-2 bg-red-400 text-danger rounded-lg">MarkAsRead</a> --}}
                                             </div>
