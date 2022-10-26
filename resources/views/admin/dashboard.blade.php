@@ -57,6 +57,14 @@
 
     <div class="wrapper d-flex align-items-stretch">
         <nav id="sidebar">
+            <div class="new">
+                <input type="checkbox" class="checkbox" id="chk" />
+                <label class="label" for="chk">
+                    <i class="fas fa-moon"></i>
+                    <i class="fas fa-sun"></i>
+                    <div class="ball"></div>
+                </label>
+            </div>
             <div class="p-4 pt-5">
                 <h3 style="color: white">Admin {{ Auth::user()->fname }}</h3>
                 <ul class="list-unstyled components mb-5">
@@ -272,6 +280,14 @@
                             }
                         });
                     });
+                });
+            </script>
+
+            <script>
+                const chk = document.getElementById('chk');
+
+                chk.addEventListener('change', () => {
+                    document.body.classList.toggle('dark');
                 });
             </script>
         </div>
