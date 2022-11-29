@@ -160,8 +160,7 @@
                                     <a class="dropdown-item" href="/logout"
                                         onclick="return confirm('Are you sure you want to LogOut?');">Logout</a>
                                 </div>
-                                <img
-                                    src="https://storage.needpix.com/rsynced_images/blank-profile-picture-973460_1280.png">
+                                <img src="{{ Storage::url(Auth::user()->image) }}">
                                 <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
                                     data-target="#collapseExample1">
                                     <i class="fa-solid fa-gear"></i>

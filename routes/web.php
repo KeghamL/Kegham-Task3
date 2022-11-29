@@ -93,6 +93,7 @@ Route::group(
                 Route::get('/markasread', [AdminController::class, 'markasread'])->name('markasread');
                 Route::get('/allusers', [AdminController::class, 'allusers'])->name('all-users');
                 Route::delete('/deleteallusers{user}', [AdminController::class, 'deleteallusers'])->name('deleteall-users');
+                Route::get('/download/{id}', [TeacherController::class, 'downloadimage'])->name('download');
             }
         );
     }

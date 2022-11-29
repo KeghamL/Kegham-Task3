@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
@@ -50,13 +51,8 @@ class AdminController extends Controller
         // $user->password = Hash::make($request->password);
         $user->birthday = $request->birthday;
         $user->gender = $request->gender;
-        if ($file = $request->file('image')) {
-            $destinationPath = 'uploads/images/';
-            $filename = date('YmdHis') . "." . $file->getClientOriginalExtension();
-            $file->move($destinationPath, $filename);
-            $input['image'] = "$filename";
-        }
-        $user->image = $request->image;
+        $image = $request->file('image')->store('public/images');
+        $user->image = $image;
         $res = $user->update();
         if ($res == true) {
             return back()->with('success', 'User Updated Successfully!');
@@ -190,13 +186,8 @@ class AdminController extends Controller
         $user->birthday = $request->birthday;
         $user->role_as = $request->role_as;
         $user->gender = $request->gender;
-        if ($file = $request->file('image')) {
-            $filename = date('YmdHis') . "." . $file->getClientOriginalExtension();
-            $destinationPath = "uploads/";
-            $file->move($destinationPath, $filename);
-            $input['image'] = "$filename";
-        }
-        $user->image = $request->image;
+        $image = $request->file('image')->store('public/images');
+        $user->image = $image;
         $res = $user->save();
         if ($res == true) {
             return back()->with('success', 'Teacher Registered Successfully!');
@@ -235,13 +226,8 @@ class AdminController extends Controller
         $user->course_id = $request->course_id;
         $user->birthday = $request->birthday;
         $user->gender = $request->gender;
-        if ($file = $request->file('image')) {
-            $destinationPath = 'uploads/images/';
-            $filename = date('YmdHis') . "." . $file->getClientOriginalExtension();
-            $file->move($destinationPath, $filename);
-            $input['image'] = "$filename";
-        }
-        $user->image = $request->image;
+        $image = $request->file('image')->store('public/images');
+        $user->image = $image;
         $res = $user->update();
         if ($res == true) {
             return back()->with('success', 'Teacher Updated Successfully!');
@@ -343,8 +329,9 @@ class AdminController extends Controller
 
     public function statistics()
     {
-        $activities = Activity::all();
-        return view('admin.statistics', compact('activities'));
+        $activities = Activity::paginate(7);
+        $i = 0;
+        return view('admin.statistics', compact('activities' , 'i'));
     }
 
     public function deletestatistics()
@@ -373,6 +360,7 @@ class AdminController extends Controller
     public function deleteallusers(User $user)
     {
         $user->delete();
+        Storage::delete($user->image);
         return back()->with('success', 'User Deleted Successfully');
     }
 }

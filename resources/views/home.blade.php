@@ -342,7 +342,6 @@
             var value = document.getElementById("password").value;
             var value = document.getElementById("repassword").value;
             var value = document.getElementById("birthday").value;
-            var value = document.getElementById("course").value;
             validateDate(value);
         });
     </script>

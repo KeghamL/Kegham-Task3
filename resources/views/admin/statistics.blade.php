@@ -21,7 +21,7 @@
     </div>
     <table class="table">
         <thead>
-            <th>ID</th>
+            <th>No.</th>
             <th>Visited Page</th>
             <th>User Name</th>
             <th>User Email</th>
@@ -38,14 +38,14 @@
         @foreach ($activities as $activity)
             <tbody>
                 <tr>
-                    <td>{{ $activity->id ?? 'unknown' }}</td>
+                    <td>{{ ++$i}}</td>
                     <td>{{ $activity->urladdress ?? 'unknown' }}</td>
                     <td>{{ $activity->user->fname ?? 'unknown' }} {{ $activity->user->lname ?? 'unknown' }}</td>
                     <td>{{ $activity->user->email ?? 'unknown' }}</td>
-                    <td>{{ $activity->created_at ?? 'unknown' }}</td>
+                    <td>{{ $activity->created_at->diffForHumans() ?? 'unknown' }}</td>
                 </tr>
         @endforeach
         </tbody>
-
     </table>
+    {{ $activities->links() }}
 @endsection

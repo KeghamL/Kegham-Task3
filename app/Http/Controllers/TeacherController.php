@@ -13,6 +13,7 @@ use App\Models\Announcement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use App\Notifications\NewAssignmentNotification;
 use Illuminate\Support\Facades\Notification;
 
@@ -56,13 +57,8 @@ class TeacherController extends Controller
         $assignment->description = $request->description;
         $assignment->marks = $request->marks;
         $assignment->submission = $request->submission;
-        if ($file = $request->file('image')) {
-            $filename = date('YmdHis') . "." . $file->getClientOriginalExtension();
-            $destinationPath = "uploads/";
-            $file->move($destinationPath, $filename);
-            $input['image'] = "$filename";
-        }
-        $assignment->image = $request->image;
+        $image = $request->file('image')->store('public/images');
+        $assignment->image = $image;
         $res = $assignment->save();
         if ($res == true) {
             Notification::send($admins, new NewAssignmentNotification($assignment));
@@ -102,13 +98,8 @@ class TeacherController extends Controller
         $assignment->description = $request->description;
         $assignment->marks = $request->marks;
         $assignment->submission = $request->submission;
-        if ($file = $request->file('image')) {
-            $destinationPath = 'uploads/';
-            $filename = date('YmdHis') . "." . $file->getClientOriginalExtension();
-            $file->move($destinationPath, $filename);
-            $input['image'] = "$filename";
-        }
-        $assignment->image = $request->image;
+        $image = $request->file('image')->store('public/images');
+        $assignment->image = $image;
         $res = $assignment->update();
         if ($res == true) {
             return back()->with('success', 'Assignment Updated Successfully!');
@@ -290,4 +281,5 @@ class TeacherController extends Controller
     {
         return view('teacher.updateteacher');
     }
+
 }

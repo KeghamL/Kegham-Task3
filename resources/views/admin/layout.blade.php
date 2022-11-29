@@ -102,7 +102,7 @@
                         <ul class="nav navbar-nav ml-auto ">
                             <li class="nav-item active ">
                                 <img
-                                    src="https://storage.needpix.com/rsynced_images/blank-profile-picture-973460_1280.png">
+                                    src="{{ Storage::url(Auth::user()->image) }}">
                                 <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                                     <i class="fa-solid fa-gear"></i>
                                 </button>

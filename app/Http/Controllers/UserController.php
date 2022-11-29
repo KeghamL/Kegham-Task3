@@ -71,14 +71,8 @@ class UserController extends Controller
         $user->password = Hash::make($request->password);
         $user->birthday = $request->birthday;
         $user->gender = $request->gender;
-        if ($file = $request->file('image')) {
-            $filename = date('YmdHis') . "." . $file->getClientOriginalExtension();
-            $destinationPath = "uploads/";
-            $file->move($destinationPath, $filename);
-            $input['image'] = "$filename";
-        }
-        $user->image = $request->image;
-        dd($user);
+        $image = $request->file('image')->store('public/images');
+        $user->image = $image;
         $res = $user->save();
         if ($res == true) {
             Notification::send($admins, new NewUserNotification($user));
@@ -174,13 +168,8 @@ class UserController extends Controller
         $answer->course_id = auth()->user()->course_id;
         $answer->assignment_id = $request->assignment_id;
         $answer->description = $request->description;
-        if ($file = $request->file('image')) {
-            $filename = date('YmdHis') . "." . $file->getClientOriginalExtension();
-            $destinationPath = "uploads/";
-            $file->move($destinationPath, $filename);
-            $input['image'] = "$filename";
-        }
-        $answer->image = $request->image;
+        $image = $request->file('image')->store('public/images');
+        $answer->image = $image;
         if (!Answer::where('user_id', auth()->user()->id)->where('assignment_id', $request->assignment_id)->exists()) {
             $res = $answer->save();
         } else {

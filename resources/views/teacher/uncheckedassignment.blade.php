@@ -8,6 +8,9 @@
             </div>
         </div>
     </div>
+    <div id="image-popup">
+        <img id="large-image" src="" alt="">
+    </div>
     <table class="table">
         <thead>
             <th>Assignment-course</th>
@@ -31,9 +34,13 @@
                     <td>{{ $assignment->description ?? 'unknown' }}</td>
                     <td>{{ $assignment->marks ?? 'unknown' }}</td>
                     <td>{{ $assignment->submission ?? 'unknown' }}</td>
-                    <td>{{ $assignment->image ?? 'unknown' }}</td>
+                    <td> <embed class="open" src="{{ Storage::url($assignment->image) }}" width="50px" height="50px">
+                        <a href="{{ Storage::url($assignment->image) }}" download="{{ $assignment->image }}">Download</a>
+                    </td>
                     <td>{{ $assignment->status ?? 'unknown' }}</td>
-                    <td><i class="fa fa-eye" aria-hidden="true"></i> {{ $assignment->views ?? 'unknown' }}</td>
+                    <td><i class="fa fa-eye" aria-hidden="true"></i>
+                        {{ $assignment->views ?? 'unknown' }}
+                    </td>
                     <td>
                         <a href="{{ route('check-assignment', $assignment->id) }}" class="btn btn-success">Check</a>
                     </td>
@@ -46,4 +53,16 @@
         </tbody>
 
     </table>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $(".open").click(function() {
+                var path = $(this).attr('src');
+                $("#large-image").attr('src', path);
+                $("#image-popup").show();
+            })
+            $("#image-popup").click(function() {
+                $("#image-popup").hide();
+            })
+        })
+    </script>
 @endsection

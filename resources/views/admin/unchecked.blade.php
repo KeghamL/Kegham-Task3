@@ -37,6 +37,9 @@
                     <td>
                         <a href="/showansweradmin/{{ $assignment->id }}" class="btn btn-info">View</a>
                     </td>
+                    <td>
+                        <a href="{{ route('download', $assignment->id) }}" class="btn btn-success">Download</a>
+                    </td>
                 </tr>
         @endforeach
         </tbody>
