@@ -89,7 +89,7 @@
                                     <i class="fa-solid fa-gear"></i>
                                 </button>
                                 <div class="dropdown-menu ">
-                                    <a class="dropdown-item" href="/">Profile</a>
+                                    <a class="dropdown-item" href="/updateteacher">Profile</a>
                                     <a class="dropdown-item" href="/changeteacherpassword">Settings</a>
                                     <a class="dropdown-item" href="/logout"
                                         onclick="return confirm('Are you sure you want to LogOut?');">Logout</a>

@@ -155,8 +155,8 @@
                                 </div>
 
                                 <div class="dropdown-menu" id="collapseExample1">
-                                    <a class="dropdown-item" href="/updateadmin">Profile</a>
-                                    <a class="dropdown-item" href="/changeadminpassword">Settings</a>
+                                    <a class="dropdown-item" href="/updateteacher">Profile</a>
+                                    <a class="dropdown-item" href="/changeteacherpassword">Settings</a>
                                     <a class="dropdown-item" href="/logout"
                                         onclick="return confirm('Are you sure you want to LogOut?');">Logout</a>
                                 </div>

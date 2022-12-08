@@ -11,12 +11,16 @@ use App\Models\Subject;
 use App\Models\Teacher;
 use App\Models\Assignment;
 use App\Models\Announcement;
+use App\Mail\WelcomeMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Notifications\NewUserNotification;
 use App\Notifications\NewAnswerNotification;
+use App\Notifications\WelcomeMailNotification;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Carbon;
 use Illuminate\Contracts\Auth\Authenticatable;
 
 
@@ -52,7 +56,7 @@ class UserController extends Controller
 
             'fname' => 'required',
             'lname' => 'required',
-            'email' => 'required|email|unique:users',
+            'email' => 'required|email',
             'password' => 'required|min:3|max:8',
             'repassword' => 'required|same:password',
             'birthday' => 'required|before:5 years ago',
@@ -62,6 +66,7 @@ class UserController extends Controller
         ]);
         $admins = User::where('role_as', '1')->get();
         $teachers = User::where('role_as', '2')->get();
+        $date = Carbon::now()->addMinutes(3);
         $user = new User();
         $user->fname = $request->fname;
         $user->lname = $request->lname;
@@ -77,6 +82,8 @@ class UserController extends Controller
         if ($res == true) {
             Notification::send($admins, new NewUserNotification($user));
             Notification::send($teachers, new NewUserNotification($user));
+            Mail::later($date ,$request->email)->send(new WelcomeMail($user));
+            // $user->notify(new WelcomeMailNotification($user));
             return redirect('/login')->with('success', 'User Registered Successfully!');
         } else {
             return back()->with('fail', 'Something Went Wrong!');
@@ -110,6 +117,9 @@ class UserController extends Controller
                     $assignments = Assignment::where('course_id', $user->course_id)->get();
                     $notifications = $request->user()->notifications->all();
                     return view('admin.dashboard', compact('courses', 'subjects', 'users', 'notifications', 'assignments'))->with('success', 'Welcome to Admin Dashboard!');
+                    // return response([
+                    //     "message" => ["Welcome To Main Page!!"]
+                    // ]);
                     // User:
                 } elseif ($user->role_as == '0') {
                     $announcments = Announcement::where('course_id', $user->course_id)->get();

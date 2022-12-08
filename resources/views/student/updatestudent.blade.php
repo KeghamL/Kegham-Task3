@@ -70,8 +70,7 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="nav navbar-nav ml-auto ">
                             <li class="nav-item active ">
-                                <img
-                                    src="{{ Storage::url(Auth::user()->image) }}">
+                                <img src="{{ Storage::url(Auth::user()->image) }}">
                                 <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                                     <i class="fa-solid fa-gear"></i>
                                 </button>
@@ -151,10 +150,8 @@
 
 
                         <div class="form-floating mb-3">
-                            <input type="radio" id="gender" name="gender"
-                                value="{{ auth()->user()->gender == 'Male' ? 'checked' : '' }}" required>Male
-                            <input type="radio" id="gender" name="gender"
-                                value="{{ auth()->user()->gender == 'Female' ? 'checked' : '' }}" required>Female
+                            <input type="radio" id="gender" name="gender" value="male" required>Male
+                            <input type="radio" id="gender" name="gender" value="female" required>Female
                             @error('gender')
                                 <div class="alert alert-danger">{{ $message }}</div>
                             @enderror

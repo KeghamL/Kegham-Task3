@@ -86,4 +86,13 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\Activity');
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::deleting(function($user){
+        $user->assignment()->delete();
+        });
+        
+    }
 }

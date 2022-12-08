@@ -49,7 +49,7 @@
                             @csrf
                             @method('delete')
                             <button type="submit" class="btn btn-danger"
-                                onclick="return confirm('Are you sure you want to Reset All Statistics?');">Delete</button>
+                                onclick="return confirm('Are you sure you want to delete this User?');">Delete</button>
                         </form>
                     </td>
                 </tr>

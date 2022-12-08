@@ -52,7 +52,7 @@ class AdminController extends Controller
         $user->birthday = $request->birthday;
         $user->gender = $request->gender;
         $image = $request->file('image')->store('public/images');
-        $user->image = $image;
+        $user->image = $image; 
         $res = $user->update();
         if ($res == true) {
             return back()->with('success', 'User Updated Successfully!');

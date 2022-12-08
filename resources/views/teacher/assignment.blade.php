@@ -77,7 +77,8 @@
 
                 <div class="form-group row">
                     <label for="submission">Assignment Last Date Of Submission</label>
-                    <input type="date" id="submission" class="form-control"
+                    <input type="datetime-local" id="submission" class="form-control"
+                        min="{{ $min_date->format('Y-m-d\TH:i:s') }}" max="{{ $max_date->format('Y-m-d\TH:i:s') }}"
                         placeholder="Enter Assignment Last Date Of Submission" name="submission"
                         value="{{ old('submission') }}" />
                     @error('submission')

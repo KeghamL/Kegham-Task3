@@ -21,8 +21,8 @@
         .bg-img {
 
             position: absolute;
-            top: 56px;
-            max-width: 1633px;
+            top: 48px;
+            max-width: 1400px;
             overflow: hidden;
             height: 500px;
             background-size: cover;
@@ -40,12 +40,12 @@
         }
 
         .left {
-            top: 35%;
+            top: 115%;
             left: 45px;
         }
 
         .right {
-            bottom: 63%;
+            top: 115%;
             right: 35px;
         }
 
@@ -69,9 +69,9 @@
             display: none;
         }
 
-        #google_translate_element {
-            transform: translate(250px)
-        }
+        /* #google_translate_element {
+            transform: translate(120px);
+        } */
     </style>
 </head>
 
@@ -286,7 +286,7 @@
 
 
     {{-- JavaScript Part --}}
-    <script>
+    {{-- <script>
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
                     pageLanguage: 'en'
@@ -294,7 +294,7 @@
                 'google_translate_element'
             );
         }
-    </script>
+    </script> --}}
 
     <script type="text/javascript">
         var button = document.getElementById('right');

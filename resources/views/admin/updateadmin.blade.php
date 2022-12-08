@@ -69,10 +69,8 @@
 
 
                 <div class="form-floating mb-3">
-                    <input type="radio" id="gender" name="gender"
-                        value="{{ auth()->user()->gender == 'Male' ? 'checked' : '' }}" required>Male
-                    <input type="radio" id="gender" name="gender"
-                        value="{{ auth()->user()->gender == 'Female' ? 'checked' : '' }}" required>Female
+                    <input type="radio" id="gender" name="gender" value="male" required>Male
+                    <input type="radio" id="gender" name="gender" value="female" required>Female
                     @error('gender')
                         <div class="alert alert-danger">{{ $message }}</div>
                     @enderror

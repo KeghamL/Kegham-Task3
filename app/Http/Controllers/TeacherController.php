@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\Auth;
 use App\Models\Mark;
 use App\Models\User;
@@ -14,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Carbon;
 use App\Notifications\NewAssignmentNotification;
 use Illuminate\Support\Facades\Notification;
 
@@ -32,7 +32,9 @@ class TeacherController extends Controller
     {
         $course = Course::where('id', auth()->user()->course_id)->first();
         $subjects = Subject::where('course_id', auth()->user()->course_id)->get();
-        return view('teacher.assignment', compact('course', 'subjects'));
+        $min_date = Carbon::today();
+        $max_date = Carbon::now()->addWeek();
+        return view('teacher.assignment', compact('course', 'subjects' , 'min_date' , 'max_date'));
     }
 
     public function addassignment(Request $request)

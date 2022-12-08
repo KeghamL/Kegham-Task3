@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Student</title>
+    <title>Teacher</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -23,29 +23,77 @@
         height: 35px;
         border-radius: 20px;
     }
+
+    i {
+        font-size: 20px;
+        position: relative;
+        top: 2px;
+        padding-left: 3px;
+        padding-right: 3px;
+        cursor: pointer;
+    }
+
+    span {
+        position: absolute;
+        right: 117px;
+        top: 13px;
+    }
+
+    #collapseExample {
+        height: 300px;
+        overflow-y: scroll;
+    }
 </style>
+<script>
+    $.ajaxSetup({
+        headers: {
+            'X-Auth-Token': "{{ csrf_token() }}"
+        }
+    });
+</script>
 
 <body>
 
     <div class="wrapper d-flex align-items-stretch">
         <nav id="sidebar">
             <div class="p-4 pt-5">
-                <h3 style="color: white">Student {{ Auth::user()->fname }}</h3>
+                <h3 style="color: white">Teacher {{ Auth::user()->fname }}</h3>
                 <ul class="list-unstyled components mb-5">
                     <li>
-                        <a href="/studentdashboard">Dashboard</a>
+                        <a href="/teacherdashboard">Dashboard</a>
                     </li>
                     <li class="active">
                         <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false"
                             class="dropdown-toggle">Assignment</a>
                         <ul class="collapse list-unstyled" id="homeSubmenu">
                             <li>
-                                <a href="/teacher">New Assignment</a>
+                                <a href="/assignment">Add Assignment</a>
                             </li>
                             <li>
-                                <a href="/manageteacher">Uploaded Assignment</a>
+                                <a href="/manageassignment">Manage Assignment</a>
                             </li>
                         </ul>
+                    </li>
+                    <li>
+                        <a href="/announcment">News/Announcments</a>
+                    </li>
+                    <li>
+                        <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false"
+                            class="dropdown-toggle">Uploaded Assignments</a>
+                        <ul class="collapse list-unstyled" id="pageSubmenu">
+                            <li>
+                                <a href="/unchecked">UnChecked</a>
+                            </li>
+                            <li>
+                                <a href="/checked">Checked</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="/searchteacher">Search</a>
+                    </li>
+                    <li>
+                        <a href="/registeredusers">Registered Users</a>
                     </li>
                 </ul>
             </div>
@@ -69,22 +117,63 @@
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="nav navbar-nav ml-auto ">
-                            <li class="nav-item active ">
-                                <img
-                                    src="{{ Storage::url(Auth::user()->image) }}">
-                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                            <li class="nav-item active">
+                                @if (count(auth()->user()->unreadNotifications) !== 0)
+                                    <span class="badge badge-danger"
+                                        id="notifications-badge">{{ count(auth()->user()->unreadNotifications) }}</span>
+                                @endif
+                                <i class="fa-solid fa-bell" data-toggle="dropdown" data-target="#collapseExample"
+                                    id="markasread"></i>
+                                <div class="dropdown-menu" id="collapseExample">
+                                    @forelse (auth()->user()->Notifications as $notification)
+                                        <input type="hidden" value="{{ $notification->id }}" name="notification_id">
+                                        <a class="dropdown-item">
+                                            @if ($notification->type == 'App\Notifications\NewUserNotification')
+                                                <div class="text-dark  p-2 m-3 ">
+                                                    <a href="/registeredusers"> <b>{{ $notification->data['fname'] }}
+                                                            ({{ $notification->data['email'] }})
+                                                        </b>
+                                                        Registered In
+                                                        The
+                                                        Website!!
+                                                    </a>
+                                                </div>
+                                        </a>
+                                    @elseif ($notification->type == 'App\Notifications\NewAnswerNotification')
+                                        <a class="dropdown-item" id="markasread">
+                                            <div class="text-dark  p-2 m-3 ">
+                                                <a href=""> New <b>Answer</b> Has Been
+                                                    Submitted!</a>
+                                                {{-- <a href="/markasread{{ $notification->id }}"
+                                                    class="p-2 bg-red-400 text-danger rounded-lg">MarkAsRead</a> --}}
+                                            </div>
+                                        </a>
+                                    @endif
+                                @empty
+                                    There Is No Notifications!
+                                    @endforelse
+                                </div>
+
+                                <div class="dropdown-menu" id="collapseExample1">
+                                    <a class="dropdown-item" href="/updateteacher">Profile</a>
+                                    <a class="dropdown-item" href="/changeteacherpassword">Settings</a>
+                                    <a class="dropdown-item" href="/logout"
+                                        onclick="return confirm('Are you sure you want to LogOut?');">Logout</a>
+                                </div>
+                                <img src="{{ Storage::url(Auth::user()->image) }}">
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
+                                    data-target="#collapseExample1">
                                     <i class="fa-solid fa-gear"></i>
                                 </button>
-                                <div class="dropdown-menu ">
-                                    <a class="dropdown-item" href="/updatestudent">Profile</a>
-                                    <a class="dropdown-item" href="/changeteacherpassword">Settings</a>
-                                    <a class="dropdown-item" href="/logout">Logout</a>
+                                <div class="dropdown-menu">
+
                                 </div>
                             </li>
                         </ul>
                     </div>
                 </div>
             </nav>
+
             @if ($message = Session::get('success'))
                 <div class="alert alert-success">
                     <p>{{ $message }}</p>
@@ -100,7 +189,7 @@
 
             <div class="card card-outline-secondary">
                 <div class="card-header">
-                    <h3 class="mb-0">Update Student Profile</h3>
+                    <h3 class="mb-0">Update Teacher Profile</h3>
                 </div>
                 <div class="card-body">
                     <form class="form" action="/adminupdate/{{ auth()->user()->id }}" method="POST"
@@ -108,16 +197,18 @@
                         @csrf
                         @method('PUT')
                         <div class="form-floating mb-3">
-                            <input type="name" id="fname" class="form-control" placeholder="Enter Your FirstName"
-                                name="fname" value="{{ auth()->user()->fname }}" />
+                            <input type="name" id="fname" class="form-control"
+                                placeholder="Enter Your FirstName" name="fname"
+                                value="{{ auth()->user()->fname }}" />
                             @error('fname')
                                 <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
                         </div>
 
                         <div class="form-floating mb-3">
-                            <input type="name" id="lname" class="form-control" placeholder="Enter Your LastName"
-                                name="lname" value="{{ auth()->user()->lname }}" />
+                            <input type="name" id="lname" class="form-control"
+                                placeholder="Enter Your LastName" name="lname"
+                                value="{{ auth()->user()->lname }}" />
                             @error('lname')
                                 <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
@@ -151,10 +242,8 @@
 
 
                         <div class="form-floating mb-3">
-                            <input type="radio" id="gender" name="gender"
-                                value="{{ auth()->user()->gender == 'Male' ? 'checked' : '' }}" required>Male
-                            <input type="radio" id="gender" name="gender"
-                                value="{{ auth()->user()->gender == 'Female' ? 'checked' : '' }}" required>Female
+                            <input type="radio" id="gender" name="gender" value="male" required>Male
+                            <input type="radio" id="gender" name="gender" value="female" required>Female
                             @error('gender')
                                 <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
@@ -172,6 +261,41 @@
             <script src="js/bootstrap.min.js"></script>
             <script src="js/main.js"></script>
         </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"
+            integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+        <script>
+            $(document).ready(function() {
+                $("#markasread").on('click', function() {
+                    var notification_id = $("[name=notification_id]").val();
+                    let data = {
+                        notification_id
+                    }
+
+                    $.ajax({
+                        method: "GET",
+                        url: "/markasread",
+                        data,
+                        success: function(res) {
+                            if (res.status) {
+                                $('#notifications-badge').addClass('d-none')
+                            }
+                        },
+                        error: function(e) {
+                            console.info("Error");
+                        },
+                        done: function(e) {
+                            console.info("DONE");
+                        }
+                    });
+                });
+            });
+        </script>
+
+    </div>
+
 </body>
 
 </html>
