@@ -82,8 +82,8 @@ class UserController extends Controller
         if ($res == true) {
             Notification::send($admins, new NewUserNotification($user));
             Notification::send($teachers, new NewUserNotification($user));
-            Mail::later($date ,$request->email)->send(new WelcomeMail($user));
-            // $user->notify(new WelcomeMailNotification($user));
+            Mail::to($request->email)->send(new WelcomeMail($user));
+            $user->notify(new WelcomeMailNotification($user));
             return redirect('/login')->with('success', 'User Registered Successfully!');
         } else {
             return back()->with('fail', 'Something Went Wrong!');
