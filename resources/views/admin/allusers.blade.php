@@ -19,42 +19,49 @@
             </div>
         </div>
     </div>
-    <table class="table">
-        <thead>
-            <th>ID</th>
-            <th>FirstName</th>
-            <th>LastName</th>
-            <th>Email</th>
-            <th>Course</th>
-            <th>Birthday</th>
-            <th>Gender</th>
-            <th>Role</th>
-            <th>RegisterDate</th>
-            <th>Action</th>
-        </thead>
-        @foreach ($users as $user)
-            <tbody>
-                <tr>
-                    <td>{{ $user->id ?? 'unknown' }}</td>
-                    <td>{{ $user->fname ?? 'unknown' }}</td>
-                    <td>{{ $user->lname ?? 'unknown' }}</td>
-                    <td>{{ $user->email ?? 'unknown' }}</td>
-                    <td>{{ $user->course->course ?? 'unknown' }}({{ $user->course->branch ?? 'unknown' }})</td>
-                    <td>{{ $user->birthday ?? 'unknown' }}</td>
-                    <td>{{ $user->gender ?? 'unknown' }}</td>
-                    <td>{{ $user->role_as ?? 'unknown' }}</td>
-                    <td>{{ $user->created_at ?? 'unknown' }}</td>
-                    <td>
-                        <form action="/deleteallusers {{ $user->id }}" method="POST">
-                            @csrf
-                            @method('delete')
-                            <button type="submit" class="btn btn-danger"
-                                onclick="return confirm('Are you sure you want to delete this User?');">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-        @endforeach
-        </tbody>
+    <form action="/deleteallusers" method="POST">
+        @csrf
+        @method('delete')
+        <table class="table">
+            <thead>
+                <th>No</th>
+                <th>Select</th>
+                <th>FirstName</th>
+                <th>LastName</th>
+                <th>Email</th>
+                <th>Course</th>
+                <th>Birthday</th>
+                <th>Gender</th>
+                <th>Role</th>
+                <th>RegisterDate</th>
+            </thead>
+            @foreach ($users as $user)
+                <tbody>
+                    <tr>
+                        <td>{{ ++$i }}</td>
+                        <td><input type="checkbox" class="check-list" name="ids[{{ $user->id }}]"
+                                value="{{ $user->id }}"></td>
+                        <td>{{ $user->fname ?? 'unknown' }}</td>
+                        <td>{{ $user->lname ?? 'unknown' }}</td>
+                        <td>{{ $user->email ?? 'unknown' }}</td>
+                        <td>{{ $user->course->course ?? 'unknown' }}({{ $user->course->branch ?? 'unknown' }})</td>
+                        <td>{{ $user->birthday ?? 'unknown' }}</td>
+                        <td>{{ $user->gender ?? 'unknown' }}</td>
+                        <td>{{ $user->role_as ?? 'unknown' }}</td>
+                        <td>{{ $user->created_at ?? 'unknown' }}</td>
+                    </tr>
+            @endforeach
+            <button type="submit" id="btn-delete" class="btn btn-danger"
+                onclick="return confirm('Are you sure you want to delete this User?');" disabled>Delete
+                Selected</button>
+            </tbody>
 
-    </table>
-@endsection
+        </table>
+        <script>
+            $(document).ready(function() {
+                $('.check-list').change(function() {
+                    $('#btn-delete').prop('disabled', !($(this).is(":checked")));
+                });
+            });
+        </script>
+    @endsection

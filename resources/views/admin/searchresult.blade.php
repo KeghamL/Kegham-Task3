@@ -50,7 +50,7 @@
                      <td>{{ $assignment->description }}</td>
                      <td>{{ $assignment->marks }}</td>
                      <td>{{ $assignment->submission }}</td>
-                     <td>{{ $assignment->image }}</td>
+                     <td><embed src="{{ Storage::url($assignment->image) }}" width="50px" height="50px"></td>
                      <td>{{ $assignment->status }}</td>
                  </tr>
          @endforeach

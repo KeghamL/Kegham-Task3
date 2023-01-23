@@ -23,7 +23,7 @@ class CreateAnswersTable extends Migration
                 ->onDelete('cascade');
             $table->foreignId('assignment_id')->constrained('assignments')
                 ->onUpdate('cascade')
-                ->onDelete('cascade');;
+                ->onDelete('cascade');
             $table->string('description');
             $table->string('image');
             $table->timestamps();

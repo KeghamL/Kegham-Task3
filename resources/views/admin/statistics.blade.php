@@ -38,7 +38,7 @@
         @foreach ($activities as $activity)
             <tbody>
                 <tr>
-                    <td>{{ ++$i}}</td>
+                    <td>{{ ++$i }}</td>
                     <td>{{ $activity->urladdress ?? 'unknown' }}</td>
                     <td>{{ $activity->user->fname ?? 'unknown' }} {{ $activity->user->lname ?? 'unknown' }}</td>
                     <td>{{ $activity->user->email ?? 'unknown' }}</td>

@@ -26,9 +26,9 @@
                     </td>
                     <td>{{ $assignment->user->fname ?? 'unknown' }}</td>
                     <td>{{ $assignment->marks ?? 'unknown' }}</td>
-                    <td>{{ $assignment->submission ?? 'unknown' }}</td>
+                    <td><span class="countdown" {{ $assignment->submission ?? 'unknown' }}></span></td>
                     <td>{{ $assignment->status ?? 'unknown' }}</td>
-                    <td>{{ $assignment->image ?? 'unknown' }}</td>
+                    <td><embed src="{{ Storage::url($assignment->image) }}" width="50px" height="50px"></td>
                     <td>
                         <a href="{{ route('answer', ['id' => $assignment->id]) }}" class="btn btn-success">Submit</a>
                     </td>
@@ -37,4 +37,24 @@
         </tbody>
 
     </table>
+    <script type="text/javascript">
+        var count_id = '{{ $assignment->submission }}';
+        var countDownDate = new Date(count_id).getTime();
+        var x = setInterval(function() {
+                var now = new Date().getTime();
+                var distance = countDownDate - now;
+                var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                document.getElementsByClassName("countdown")
+                    .innerHTML = days + "d  " +
+                    hours + "h " + minutes + "m " + seconds + "s";
+                if (distance < 0) {
+                    clearInterval(x);
+                    document.getElementsByClassName("countdown").innerHTML = "ENDED!";
+                }
+            },
+            1000);
+    </script>
 @endsection

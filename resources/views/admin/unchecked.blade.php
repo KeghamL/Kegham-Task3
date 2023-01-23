@@ -31,7 +31,7 @@
                     <td>{{ $assignment->description ?? 'unknown' }}</td>
                     <td>{{ $assignment->marks ?? 'unknown' }}</td>
                     <td>{{ $assignment->submission ?? 'unknown' }}</td>
-                    <td>{{ $assignment->image ?? 'unknown' }}</td>
+                    <td><embed src="{{ Storage::url($assignment->image) }}" width="50px" height="50px"></td>
                     <td>{{ $assignment->status ?? 'unknown' }}</td>
                     <td><i class="fa fa-eye" aria-hidden="true"></i> {{ $assignment->views ?? 'unknown' }}</td>
                     <td>

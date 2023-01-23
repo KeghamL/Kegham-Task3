@@ -67,8 +67,8 @@ Route::group(
                 Route::post('/addanswer', [UserController::class, 'addanswer']);
                 Route::get('/unchecked', [TeacherController::class, 'unchecked']);
                 Route::get('/checked', [TeacherController::class, 'checked']);
-                Route::get('/checkassignment{id}', [TeacherController::class, 'checkassignment'])->name('check-assignment');
-                Route::get('/uncheckassignment{id}', [TeacherController::class, 'uncheckassignment'])->name('uncheck-assignment');
+                Route::get('/checkassignment/{assignment}', [TeacherController::class, 'checkassignment'])->name('check-assignment');
+                Route::get('/uncheckassignment/{assignment}', [TeacherController::class, 'uncheckassignment'])->name('uncheck-assignment');
                 Route::get('/showanswer/{id}', [TeacherController::class, 'showanswer'])->name('show-answer');
                 Route::get('/givemark', [TeacherController::class, 'givemark'])->name('give-mark');
                 Route::post('/submitmark', [TeacherController::class, 'submitmark'])->name('submit-mark');
@@ -92,8 +92,7 @@ Route::group(
                 Route::delete('/statisticsdelete', [AdminController::class, 'deletestatistics'])->name('statistics-delete');
                 Route::get('/markasread', [AdminController::class, 'markasread'])->name('markasread');
                 Route::get('/allusers', [AdminController::class, 'allusers'])->name('all-users');
-                Route::delete('/deleteallusers{user}', [AdminController::class, 'deleteallusers'])->name('deleteall-users');
-                Route::get('/download/{id}', [TeacherController::class, 'downloadimage'])->name('download');
+                Route::delete('/deleteallusers', [AdminController::class, 'deleteallusers'])->name('deleteall-users');
             }
         );
     }

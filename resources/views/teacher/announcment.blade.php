@@ -1,7 +1,6 @@
 @extends('teacher.layout')
 
 @section('content')
-
     <style>
         .form-group {
             width: 500px;
@@ -75,23 +74,25 @@
             <th>Description</th>
             <th>Action</th>
         </thead>
-        @foreach ($announcments as $announcment)
-            <tbody>
-                <tr>
-                    <td>{{ $announcment->title }}</td>
-                    <td>{{ $announcment->description }}</td>
-                    <td>
-                        <form action="{{ route('delete-announcment', $announcment->id) }}" method="POST">
-                            @csrf
-                            @method('delete')
-                            <button type="submit" class="btn btn-danger"
-                                onclick="return confirm('Are you sure you want to Delete Announcement?');">DELETE</button>
-                        </form>
-                    </td>
-                </tr>
-        @endforeach
-        </tbody>
-
+        @if ($announcments->isEmpty())
+            <p class="text-center text-primary">There is Nothing Here!!</p>
+        @else
+            @foreach ($announcments as $announcment)
+                <tbody>
+                    <tr>
+                        <td>{{ $announcment->title }}</td>
+                        <td>{{ $announcment->description }}</td>
+                        <td>
+                            <form action="{{ route('delete-announcment', $announcment->id) }}" method="POST">
+                                @csrf
+                                @method('delete')
+                                <button type="submit" class="btn btn-danger"
+                                    onclick="return confirm('Are you sure you want to Delete Announcement?');">DELETE</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            @endforeach
+        @endif
     </table>
-
 @endsection

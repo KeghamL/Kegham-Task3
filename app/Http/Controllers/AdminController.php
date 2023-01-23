@@ -86,6 +86,7 @@ class AdminController extends Controller
     }
     public function deletecourse(Course $course)
     {
+        // $course = Course::findOrfail($id);
         $course->delete();
         return back()->with('success', 'Course Deleted Successfuly!');
     }
@@ -353,14 +354,16 @@ class AdminController extends Controller
 
     public function allusers()
     {
+        $i = 0;
         $users = User::where('role_as', '!=', '1')->get();
-        return view('admin.allusers', compact('users'));
+        return view('admin.allusers', compact('i' , 'users'));
     }
 
-    public function deleteallusers(User $user)
+    public function deleteallusers(Request $request)
     {
-        $user->delete();
-        Storage::delete($user->image);
+        // dd($request->ids);
+        $ids = $request->ids;
+        User::WhereIn('id' , $ids)->delete();
         return back()->with('success', 'User Deleted Successfully');
     }
 }

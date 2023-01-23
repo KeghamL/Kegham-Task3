@@ -44,7 +44,7 @@
                     <td>{{ $assignment->description ?? 'unknown' }}</td>
                     <td>{{ $assignment->marks ?? 'unknown' }}</td>
                     <td>{{ $assignment->submission ?? 'unknown' }}</td>
-                    <td>{{ $assignment->image ?? 'unknown' }}</td>
+                    <td> <embed src="{{ Storage::url($assignment->image) }}" width="50px" height="50px"></td>
                     <td>
                         <a href="{{ route('showedit-assignment', $assignment->id) }}" class="btn btn-info">Edit</a>
                     </td>

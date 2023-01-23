@@ -66,6 +66,7 @@
     <br>
     <table class="table">
         <thead>
+            <th>No.</th>
             <th>CourseName</th>
             <th>Subject FullName</th>
             <th>Subject ShortName</th>
@@ -73,6 +74,7 @@
         @foreach ($subjects as $subject)
             <tbody>
                 <tr>
+                    <td>{{ $loop->iteration }}</td>
                     <td>{{ $course->course }}({{ $course->branch }})</td>
                     <td>{{ $subject->subjectfullname }}</td>
                     <td>{{ $subject->subjectshortname }}</td>

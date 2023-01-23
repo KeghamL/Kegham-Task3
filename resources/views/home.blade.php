@@ -63,6 +63,7 @@
             margin-bottom: 70px;
         }
 
+        #subject,
         #subject1,
         #subject2,
         #subject3 {
@@ -208,10 +209,10 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-floating mb-3" id="subject1">
+                        <div class="form-floating mb-3" id="subject">
                             <select class="w3-input w3-border" name="subject_id" style="width:510px; height:60px;">
                                 <option value="">Choose Your Subject:</option>
-                                @foreach ($subjects1 as $subject)
+                                @foreach ($subjects as $subject)
                                     <option value="{{ $subject->id }}">
                                         {{ $subject->subjectfullname }}({{ $subject->subjectshortname }})
                                     </option>
@@ -219,7 +220,7 @@
                             </select>
                         </div>
 
-                        <div class="form-floating mb-3" id="subject2">
+                        {{-- <div class="form-floating mb-3" id="subject2">
                             <select class="w3-input w3-border" name="subject_id" style="width:510px; height:60px;">
                                 <option value="">Choose Your Subject:</option>
                                 @foreach ($subjects2 as $subject)
@@ -239,7 +240,7 @@
                                     </option>
                                 @endforeach
                             </select>
-                        </div>
+                        </div> --}}
 
 
                         <div class="form-floating mb-3">
@@ -348,23 +349,23 @@
 
     <script>
         function enableSubject(course) {
-            if (course.value == 1) {
-                document.getElementById('subject1').style = 'display:block';
+            if (course.value >= 1) {
+                document.getElementById('subject').style = 'display:block';
             } else {
-                document.getElementById('subject1').style = 'display:none';
+                document.getElementById('subject').style = 'display:none';
             }
 
-            if (course.value == 2) {
-                document.getElementById('subject2').style = 'display:block';
-            } else {
-                document.getElementById('subject2').style = 'display:none';
-            }
+            // if (course.value == 2) {
+            //     document.getElementById('subject2').style = 'display:block';
+            // } else {
+            //     document.getElementById('subject2').style = 'display:none';
+            // }
 
-            if (course.value == 3) {
-                document.getElementById('subject3').style = 'display:block';
-            } else {
-                document.getElementById('subject3').style = 'display:none';
-            }
+            // if (course.value == 3) {
+            //     document.getElementById('subject3').style = 'display:block';
+            // } else {
+            //     document.getElementById('subject3').style = 'display:none';
+            // }
         };
     </script>
 

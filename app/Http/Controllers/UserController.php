@@ -43,11 +43,11 @@ class UserController extends Controller
     public function home(Request $request)
     {
         $courses = Course::all();
-        $subjects1 = Subject::where('course_id', '1')->get();
-        $subjects2 = Subject::where('course_id', '2')->get();
-        $subjects3 = Subject::where('course_id', '3')->get();
+        foreach($courses as $course){
+            $subjects = Subject::where('course_id' , $course->id)->get();
+        }
         $news = News::all();
-        return view('home', compact('courses', 'news', 'subjects1', 'subjects2', 'subjects3'));
+        return view('home', compact('courses', 'news', 'subjects'));
     }
 
     public function registeration(Request $request)
@@ -66,7 +66,7 @@ class UserController extends Controller
         ]);
         $admins = User::where('role_as', '1')->get();
         $teachers = User::where('role_as', '2')->get();
-        $date = Carbon::now()->addMinutes(3);
+        // $date = Carbon::now()->addMinutes(3);
         $user = new User();
         $user->fname = $request->fname;
         $user->lname = $request->lname;
@@ -108,7 +108,7 @@ class UserController extends Controller
             return back()->with('fail', 'We Dont Have Any User With This Email!');
         } else {
             auth()->attempt($request->only(['email', 'password']));
-            if (Hash::check(request('password'), $user->password)) {
+            if (Hash::check(request('password'), $user->getAuthPassword())) {
                 // Admin:
                 if ($user->role_as == '1') {
                     $courses = Course::count();
@@ -116,9 +116,10 @@ class UserController extends Controller
                     $users = User::where('role_as', '2')->count();
                     $assignments = Assignment::where('course_id', $user->course_id)->get();
                     $notifications = $request->user()->notifications->all();
+                    // $token = $user->createToken('new-token')->plainTextToken;
                     return view('admin.dashboard', compact('courses', 'subjects', 'users', 'notifications', 'assignments'))->with('success', 'Welcome to Admin Dashboard!');
                     // return response([
-                    //     "message" => ["Welcome To Main Page!!"]
+                    //     $token
                     // ]);
                     // User:
                 } elseif ($user->role_as == '0') {
@@ -153,7 +154,7 @@ class UserController extends Controller
         return view('student.updatestudent');
     }
 
-    public function newassignment()
+    public function newassignment(Assignment $assignment , Request $request)
     {
         $courseID = auth()->user()->course_id;
         $assignments = Assignment::where('course_id', $courseID)->get();
@@ -161,12 +162,12 @@ class UserController extends Controller
         return view('student.newassignment', compact('assignments'));
     }
 
-    public function answer()
+    public function answer(Assignment $assignment , Request $request)
     {
         return view('student.answer');
     }
 
-    public function addanswer(Request $request)
+    public function addanswer(Assignment $assignment , Request $request)
     {
         $request->validate([
             'description' => 'required',
@@ -180,6 +181,8 @@ class UserController extends Controller
         $answer->description = $request->description;
         $image = $request->file('image')->store('public/images');
         $answer->image = $image;
+        $assignment = Assignment::find($request->assignment_id);
+        $assignment->users()->attach(auth()->user()->id);
         if (!Answer::where('user_id', auth()->user()->id)->where('assignment_id', $request->assignment_id)->exists()) {
             $res = $answer->save();
         } else {
@@ -239,6 +242,8 @@ class UserController extends Controller
     public function logout()
     {
         auth()->logout();
+        // auth()->user()->currentAccessToken()->delete();
+        // session()->flush();
         return redirect('login')->with('success', 'You LoggedOut Successfully');
     }
 }

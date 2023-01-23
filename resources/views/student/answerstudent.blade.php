@@ -37,7 +37,7 @@
                     <td>{{ $answer->user->email }}</td>
                     <td>{{ $answer->assignment->marks }}</td>
                     <td>{{ $answer->description }}</td>
-                    <td>{{ $answer->image }}</td>
+                    <td><embed src="{{ Storage::url($answer->image) }}" width="50px" height="50px"></td>
                 </tr>
         @endforeach
         </tbody>

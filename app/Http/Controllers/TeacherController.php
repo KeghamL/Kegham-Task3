@@ -162,19 +162,19 @@ class TeacherController extends Controller
         return view('teacher.checkedassignment', compact('assignments'));
     }
 
-    public function checkassignment($id)
+    public function checkassignment(Assignment $assignment)
     {
-        $assignments = Assignment::find($id);
-        $assignments->status = 'Checked';
-        $assignments->save();
+        // $assignments = Assignment::find($id);
+        $assignment->status = 'Checked';
+        $assignment->save();
         return back();
     }
 
-    public function uncheckassignment($id)
+    public function uncheckassignment(Assignment $assignment)
     {
-        $assignments = Assignment::find($id);
-        $assignments->status = 'Unchecked';
-        $assignments->save();
+        // $assignments = Assignment::find($id);
+        $assignment->status = 'Unchecked';
+        $assignment->save();
         return back();
     }
 

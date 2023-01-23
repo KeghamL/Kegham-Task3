@@ -31,9 +31,9 @@ class Assignment extends Model
         return $this->belongsTo('App\Models\Subject');
     }
 
-    public function user()
+    public function users()
     {
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsToMany('App\Models\User')->withTimestamps();
     }
 
     public function mark()

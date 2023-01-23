@@ -67,9 +67,9 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\Announcement');
     }
 
-    public function assignment()
+    public function assignments()
     {
-        return $this->hasMany('App\Models\Assignment');
+        return $this->BelongsToMany('App\Models\Assignment');
     }
 
     public function answer()
